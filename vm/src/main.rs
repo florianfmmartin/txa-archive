@@ -38,10 +38,7 @@ mod vm {
                 s.push_str(&sb);
                 stack.push(Element::Str(s));
             }
-            (ta, tb) => panic!(
-                "\n\nError:\nI could not add {:?} and {:?}\n\n",
-                ta, tb
-            ),
+            (ta, tb) => panic!("\n\nError:\nI could not add {:?} and {:?}\n\n", ta, tb),
         }
     }
 
@@ -53,12 +50,23 @@ mod vm {
             (ta, tb) => panic!(
                 "\n\nError:\nI could not subtract {:?} from {:?}\n\n",
                 tb, ta
-            )
+            ),
+        }
+    }
+
+    pub fn mul(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na * nb)),
+            (Some(Element::Str(sa)), Some(Element::Int(nb))) => {
+                stack.push(Element::Str(sa.repeat(nb.try_into().unwrap())))
+            }
+            (ta, tb) => panic!("\n\nError:\nI could not multiply {:?} by {:?}\n\n", ta, tb),
         }
     }
 
     /*
-     * mul
      * div
      * and
      * ior
@@ -81,29 +89,25 @@ fn main() {
     vm::push(&mut stack, vm::mStr("world!"));
     vm::push(&mut stack, vm::mStr("world!"));
     vm::pop(&mut stack);
-
     vm::print(&stack);
     vm::pop(&mut stack);
     vm::pop(&mut stack);
 
     vm::push(&mut stack, vm::mInt(3));
     vm::push(&mut stack, vm::mInt(4));
-    vm::sub(&mut stack);
-
+    vm::mul(&mut stack);
     vm::print(&stack);
     vm::pop(&mut stack);
 
-    vm::push(&mut stack, vm::mStr("hello, "));
+    // vm::push(&mut stack, vm::mStr("hello, "));
+    // vm::push(&mut stack, vm::mStr("world!"));
+    // vm::mul(&mut stack);
+    // vm::print(&stack);
+    // vm::pop(&mut stack);
+
     vm::push(&mut stack, vm::mStr("world!"));
-    vm::sub(&mut stack);
-
-    vm::print(&stack);
-    vm::pop(&mut stack);
-
     vm::push(&mut stack, vm::mInt(3));
-    vm::push(&mut stack, vm::mStr("world!"));
-    vm::sub(&mut stack);
-
+    vm::mul(&mut stack);
     vm::print(&stack);
     vm::pop(&mut stack);
 }
