@@ -5,11 +5,11 @@ mod vm {
         Str(String),
     }
 
-    pub fn mInt(i: i64) -> Element {
+    pub fn m_int(i: i64) -> Element {
         Element::Int(i)
     }
 
-    pub fn mStr(s: &str) -> Element {
+    pub fn m_str(s: &str) -> Element {
         Element::Str(s.to_string())
     }
 
@@ -66,8 +66,20 @@ mod vm {
         }
     }
 
+    pub fn div(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(0))) => {
+                panic!("\n\nError:\nI could not divide {:?} by zero\n\n", na)
+            }
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na / nb)),
+            (ta, tb) => panic!("\n\nError:\nI could not divide {:?} by {:?}\n\n", ta, tb),
+        }
+    }
+
     /*
-     * div
+     * mod
      * and
      * ior
      * xor
@@ -85,29 +97,13 @@ mod vm {
 fn main() {
     let mut stack: vm::Stack = Vec::new();
 
-    vm::push(&mut stack, vm::mStr("hello, "));
-    vm::push(&mut stack, vm::mStr("world!"));
-    vm::push(&mut stack, vm::mStr("world!"));
-    vm::pop(&mut stack);
-    vm::print(&stack);
-    vm::pop(&mut stack);
-    vm::pop(&mut stack);
-
-    vm::push(&mut stack, vm::mInt(3));
-    vm::push(&mut stack, vm::mInt(4));
-    vm::mul(&mut stack);
+    vm::push(&mut stack, vm::m_int(13));
+    vm::push(&mut stack, vm::m_int(4));
+    vm::div(&mut stack);
     vm::print(&stack);
     vm::pop(&mut stack);
 
-    // vm::push(&mut stack, vm::mStr("hello, "));
-    // vm::push(&mut stack, vm::mStr("world!"));
-    // vm::mul(&mut stack);
-    // vm::print(&stack);
-    // vm::pop(&mut stack);
-
-    vm::push(&mut stack, vm::mStr("world!"));
-    vm::push(&mut stack, vm::mInt(3));
-    vm::mul(&mut stack);
-    vm::print(&stack);
-    vm::pop(&mut stack);
+    vm::push(&mut stack, vm::m_int(13));
+    vm::push(&mut stack, vm::m_int(0));
+    vm::div(&mut stack);
 }
