@@ -78,8 +78,19 @@ mod vm {
         }
     }
 
+    pub fn modulo(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(0))) => {
+                panic!("\n\nError:\nI could not divide {:?} by zero\n\n", na)
+            }
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na % nb)),
+            (ta, tb) => panic!("\n\nError:\nI could not modulo {:?} by {:?}\n\n", ta, tb),
+        }
+    }
+
     /*
-     * mod
      * and
      * ior
      * xor
@@ -99,11 +110,11 @@ fn main() {
 
     vm::push(&mut stack, vm::m_int(13));
     vm::push(&mut stack, vm::m_int(4));
-    vm::div(&mut stack);
+    vm::modulo(&mut stack);
     vm::print(&stack);
     vm::pop(&mut stack);
 
     vm::push(&mut stack, vm::m_int(13));
     vm::push(&mut stack, vm::m_int(0));
-    vm::div(&mut stack);
+    vm::modulo(&mut stack);
 }
