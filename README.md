@@ -12,7 +12,7 @@ Procedures have their own scope to reuse values seen on the stack
 
 ## Assembly language `.txa`
 
-[./txa/README.md](More details here)
+[More details here](./txa/README.md)
 
 Quick example
 
