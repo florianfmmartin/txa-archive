@@ -90,10 +90,56 @@ mod vm {
         }
     }
 
+    pub fn int_to_bool(int: i64) -> bool {
+        if int > 0 {
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn bool_to_int(b: bool) -> i64 {
+        if b {
+            1
+        } else {
+            0
+        }
+    }
+
+    pub fn and(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
+                bool_to_int(int_to_bool(na) && int_to_bool(nb)),
+            )),
+            (ta, tb) => panic!("\n\nError:\nI could not do logic `and` of {:?} by {:?}\n\n", ta, tb),
+        }
+    }
+
+    pub fn ior(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
+                bool_to_int(int_to_bool(na) || int_to_bool(nb)),
+            )),
+            (ta, tb) => panic!("\n\nError:\nI could not do logic `or` of {:?} by {:?}\n\n", ta, tb),
+        }
+    }
+
+    pub fn xor(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
+                bool_to_int(int_to_bool(na) != int_to_bool(nb)),
+            )),
+            (ta, tb) => panic!("\n\nError:\nI could not do logic `xor` of {:?} by {:?}\n\n", ta, tb),
+        }
+    }
+
     /*
-     * and
-     * ior
-     * xor
      * equ
      * neq
      * not
@@ -110,11 +156,19 @@ fn main() {
 
     vm::push(&mut stack, vm::m_int(13));
     vm::push(&mut stack, vm::m_int(4));
-    vm::modulo(&mut stack);
+    vm::and(&mut stack);
     vm::print(&stack);
     vm::pop(&mut stack);
 
     vm::push(&mut stack, vm::m_int(13));
     vm::push(&mut stack, vm::m_int(0));
-    vm::modulo(&mut stack);
+    vm::and(&mut stack);
+    vm::print(&stack);
+    vm::pop(&mut stack);
+
+    vm::push(&mut stack, vm::m_int(-6));
+    vm::push(&mut stack, vm::m_int(0));
+    vm::and(&mut stack);
+    vm::print(&stack);
+    vm::pop(&mut stack);
 }
