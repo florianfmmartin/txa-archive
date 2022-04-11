@@ -1,5 +1,5 @@
-mod vm;
-mod parser;
+mod stack;
+mod tokenizer;
 
 fn read_file_from_args() -> String {
     let args: Vec<String> = std::env::args().collect();
@@ -17,8 +17,8 @@ fn read_file_from_args() -> String {
 
 fn main() {
     let file_content = read_file_from_args();
-    parser::parse(file_content);
+    let tokens = tokenizer::tokenize(file_content);
 
-    let mut stack: vm::Stack = Vec::new();
-    vm::push(&mut stack, vm::m_int(4));
+    let mut stack: stack::Stack = Vec::new();
+    stack::push(&mut stack, stack::m_int(4));
 }
