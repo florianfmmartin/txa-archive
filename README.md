@@ -16,15 +16,15 @@ Procedures have their own scope to reuse values seen on the stack
 
 Quick example
 
-```txa
+```asm
 define $count-down #[ (n --) will print stuff ]#
     local @n
-    :loop
-        @n print
-        @n 1 sub
-        local @n
-        @n 0 lst jump :end
-        jump :loop
-    :end
+:loop
+    @n print
+    @n 1 sub
+    local @n
+    @n 0 lst jump :end
+    1 jump :loop
+:end
 endef
 ```

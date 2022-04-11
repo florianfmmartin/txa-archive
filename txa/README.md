@@ -25,7 +25,7 @@ The other VM operations are :
 - `:IDENTIFIER` makes a label to jump to
 - `BOOL jump :IDENTIFIER` jumps to the label if the `BOOL` is truthy
 
-Comments are done with `#[ ` to open a comment and ` ]#` to end it
+Comments are done with `#[_` to open a comment and `_]#` to end it where `_` is a necessary whitespace 
 
 More complete example :
 
@@ -52,26 +52,23 @@ define $fizzbuzz #[ n -- ]#
 
     @n
 
-    :return
+:return
     print
 endef
 
 define $count-down #[ n -- ]#
     local @n
+:loop
+    @n print
 
-    :loop
+    @n 1 sub
+    local @n
 
-        @n print
+    @n 0 lst
+    jump :end
 
-        @n 1 sub
-        local @n
-
-        @n 0 lst
-        jump :end
-
-    jump :loop
-
-    :end
+    1 jump :loop
+:end
 endef
 
 17 $fizzbuzz #[ prints 17 ]#
