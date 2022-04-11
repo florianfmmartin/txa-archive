@@ -190,9 +190,25 @@ mod vm {
         }
     }
 
+    pub fn lst(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(bool_to_int(na < nb))),
+            (ta, tb) => panic!("\n\nError:\nI could not check if {:?} is lesser than {:?}\n\n", ta, tb),
+        }
+    }
+
+    pub fn grt(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(bool_to_int(na > nb))),
+            (ta, tb) => panic!("\n\nError:\nI could not check if {:?} is lesser than {:?}\n\n", ta, tb),
+        }
+    }
+
     /*
-     * lst
-     * grt
      * cnd
      * whl
      * end
