@@ -52,26 +52,23 @@ define $fizzbuzz #[ n -- ]#
 
     @n
 
-    :return
+:return
     print
 endef
 
 define $count-down #[ n -- ]#
     local @n
+:loop
+    @n print
 
-    :loop
+    @n 1 sub
+    local @n
 
-        @n print
-
-        @n 1 sub
-        local @n
-
-        @n 0 lst
-        jump :end
+    @n 0 lst
+    jump :end
 
     jump :loop
-
-    :end
+:end
 endef
 
 17 $fizzbuzz #[ prints 17 ]#
