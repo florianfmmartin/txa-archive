@@ -39,14 +39,25 @@ mod vm {
                 stack.push(Element::Str(s));
             }
             (ta, tb) => panic!(
-                "\n\nError:\nIncoherent types while adding {:?} and {:?}\n\n",
+                "\n\nError:\nI could not add {:?} and {:?}\n\n",
                 ta, tb
             ),
         }
     }
 
+    pub fn sub(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na - nb)),
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not subtract {:?} from {:?}\n\n",
+                tb, ta
+            )
+        }
+    }
+
     /*
-     * sub
      * mul
      * div
      * and
@@ -77,21 +88,21 @@ fn main() {
 
     vm::push(&mut stack, vm::mInt(3));
     vm::push(&mut stack, vm::mInt(4));
-    vm::add(&mut stack);
+    vm::sub(&mut stack);
 
     vm::print(&stack);
     vm::pop(&mut stack);
 
     vm::push(&mut stack, vm::mStr("hello, "));
     vm::push(&mut stack, vm::mStr("world!"));
-    vm::add(&mut stack);
+    vm::sub(&mut stack);
 
     vm::print(&stack);
     vm::pop(&mut stack);
 
     vm::push(&mut stack, vm::mInt(3));
     vm::push(&mut stack, vm::mStr("world!"));
-    vm::add(&mut stack);
+    vm::sub(&mut stack);
 
     vm::print(&stack);
     vm::pop(&mut stack);
