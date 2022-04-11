@@ -5,12 +5,12 @@ mod vm {
         Str(String),
     }
 
-    pub fn make_int(number: i64) -> Element {
-        Element::Int(number)
+    pub fn mInt(i: i64) -> Element {
+        Element::Int(i)
     }
 
-    pub fn make_str(string: &str) -> Element {
-        Element::Str(String::from(string))
+    pub fn mStr(s: &str) -> Element {
+        Element::Str(s.to_string())
     }
 
     pub type Stack = Vec<Element>;
@@ -19,31 +19,80 @@ mod vm {
         stack.push(value);
     }
 
-    pub fn pop(stack: &mut Stack) -> Element {
-        match stack.pop() {
-            Some(element) => element,
-            None => panic!("Popping from empty stack"),
-        }
+    pub fn pop(stack: &mut Stack) {
+        stack.pop();
     }
 
     pub fn print(stack: &Stack) {
         print!("{:?}\n", stack);
     }
+
+    pub fn add(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na + nb)),
+            (Some(Element::Str(sa)), Some(Element::Str(sb))) => {
+                let mut s = String::new();
+                s.push_str(&sa);
+                s.push_str(&sb);
+                stack.push(Element::Str(s));
+            }
+            (ta, tb) => panic!(
+                "\n\nError:\nIncoherent types while adding {:?} and {:?}\n\n",
+                ta, tb
+            ),
+        }
+    }
+
+    /*
+     * sub
+     * mul
+     * div
+     * and
+     * ior
+     * xor
+     * equ
+     * neq
+     * not
+     * lst
+     * grt
+     * cnd
+     * whl
+     * end
+     */
 }
 
 fn main() {
     let mut stack: vm::Stack = Vec::new();
 
-    vm::push(&mut stack, vm::make_str("hello!"));
-    let element = vm::pop(&mut stack);
-
-    match element {
-        vm::Element::Int(number) => print!("{}\n", number),
-        vm::Element::Str(string) => print!("{}\n", string),
-    }
-
-    vm::push(&mut stack, vm::make_str("hello, "));
-    vm::push(&mut stack, vm::make_str("world!"));
+    vm::push(&mut stack, vm::mStr("hello, "));
+    vm::push(&mut stack, vm::mStr("world!"));
+    vm::push(&mut stack, vm::mStr("world!"));
+    vm::pop(&mut stack);
 
     vm::print(&stack);
+    vm::pop(&mut stack);
+    vm::pop(&mut stack);
+
+    vm::push(&mut stack, vm::mInt(3));
+    vm::push(&mut stack, vm::mInt(4));
+    vm::add(&mut stack);
+
+    vm::print(&stack);
+    vm::pop(&mut stack);
+
+    vm::push(&mut stack, vm::mStr("hello, "));
+    vm::push(&mut stack, vm::mStr("world!"));
+    vm::add(&mut stack);
+
+    vm::print(&stack);
+    vm::pop(&mut stack);
+
+    vm::push(&mut stack, vm::mInt(3));
+    vm::push(&mut stack, vm::mStr("world!"));
+    vm::add(&mut stack);
+
+    vm::print(&stack);
+    vm::pop(&mut stack);
 }
