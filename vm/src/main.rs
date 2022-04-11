@@ -113,7 +113,10 @@ mod vm {
             (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
                 bool_to_int(int_to_bool(na) && int_to_bool(nb)),
             )),
-            (ta, tb) => panic!("\n\nError:\nI could not do logic `and` of {:?} by {:?}\n\n", ta, tb),
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not do logic `and` of {:?} with {:?}\n\n",
+                ta, tb
+            ),
         }
     }
 
@@ -124,7 +127,10 @@ mod vm {
             (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
                 bool_to_int(int_to_bool(na) || int_to_bool(nb)),
             )),
-            (ta, tb) => panic!("\n\nError:\nI could not do logic `or` of {:?} by {:?}\n\n", ta, tb),
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not do logic `or` of {:?} with {:?}\n\n",
+                ta, tb
+            ),
         }
     }
 
@@ -135,40 +141,66 @@ mod vm {
             (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(
                 bool_to_int(int_to_bool(na) != int_to_bool(nb)),
             )),
-            (ta, tb) => panic!("\n\nError:\nI could not do logic `xor` of {:?} by {:?}\n\n", ta, tb),
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not do logic `xor` of {:?} with {:?}\n\n",
+                ta, tb
+            ),
+        }
+    }
+
+    pub fn not(stack: &mut Stack) {
+        let a = stack.pop();
+        match a {
+            Some(Element::Int(na)) => stack.push(Element::Int(bool_to_int(!int_to_bool(na)))),
+            ta => panic!("\n\nError:\nI could not do logic `not` of {:?}\n\n", ta),
+        }
+    }
+
+    pub fn equ(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => {
+                stack.push(Element::Int(bool_to_int(na == nb)))
+            }
+            (Some(Element::Str(sa)), Some(Element::Str(sb))) => {
+                stack.push(Element::Int(bool_to_int(sa == sb)))
+            }
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not check equality of {:?} and {:?}\n\n",
+                ta, tb
+            ),
+        }
+    }
+
+    pub fn neq(stack: &mut Stack) {
+        let b = stack.pop();
+        let a = stack.pop();
+        match (a, b) {
+            (Some(Element::Int(na)), Some(Element::Int(nb))) => {
+                stack.push(Element::Int(bool_to_int(na != nb)))
+            }
+            (Some(Element::Str(sa)), Some(Element::Str(sb))) => {
+                stack.push(Element::Int(bool_to_int(sa != sb)))
+            }
+            (ta, tb) => panic!(
+                "\n\nError:\nI could not check inequality of {:?} and {:?}\n\n",
+                ta, tb
+            ),
         }
     }
 
     /*
-     * equ
-     * neq
-     * not
      * lst
      * grt
      * cnd
      * whl
      * end
+     * local
+     * define
      */
 }
 
 fn main() {
     let mut stack: vm::Stack = Vec::new();
-
-    vm::push(&mut stack, vm::m_int(13));
-    vm::push(&mut stack, vm::m_int(4));
-    vm::and(&mut stack);
-    vm::print(&stack);
-    vm::pop(&mut stack);
-
-    vm::push(&mut stack, vm::m_int(13));
-    vm::push(&mut stack, vm::m_int(0));
-    vm::and(&mut stack);
-    vm::print(&stack);
-    vm::pop(&mut stack);
-
-    vm::push(&mut stack, vm::m_int(-6));
-    vm::push(&mut stack, vm::m_int(0));
-    vm::and(&mut stack);
-    vm::print(&stack);
-    vm::pop(&mut stack);
 }
