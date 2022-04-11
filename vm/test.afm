@@ -1,0 +1,53 @@
+"hello, "
+"world!"
+print
+pop
+pop
+
+17
+5 mod
+0 equ
+
+17
+3 mod
+0 equ
+
+ior
+print
+pop
+
+10
+5 mod
+0 equ
+
+10
+3 mod
+0 equ
+
+ior
+print
+pop
+
+9
+5 mod
+0 equ
+
+9
+3 mod
+0 equ
+
+ior
+print
+pop
+
+15
+5 mod
+0 equ
+
+15
+3 mod
+0 equ
+
+and
+print
+pop
