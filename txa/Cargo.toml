@@ -1,5 +1,5 @@
 [package]
-name = "florian-os-vm"
+name = "txa"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,5 +7,5 @@ edition = "2021"
 regex = "1.5"
 
 [[bin]]
-name = "vm"
+name = "txa"
 path = "src/main.rs"

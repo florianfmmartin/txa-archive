@@ -1,7 +1,30 @@
-# Florian's OS
+# Texo lang
 
-A computation stack, all made by me
+## VM
 
-From a VM to personnal apps
+The VM as two primitive types 64-bit integers and strings
 
-A complete system in which to operate
+It is a stack based machine
+
+It reads tokens that can define procedures acting on the stack
+
+Procedures have their own scope to reuse values seen on the stack
+
+## Assembly language `.txa`
+
+[./txa/README.md](More details here)
+
+Quick example
+
+```txa
+define $count-down #[ (n --) will print stuff ]#
+    local @n
+    :loop
+        @n print
+        @n 1 sub
+        local @n
+        @n 0 lst jump :end
+        jump :loop
+    :end
+endef
+```
