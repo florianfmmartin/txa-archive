@@ -71,13 +71,15 @@ define $count-down #[ n -- ]#
 :end
 endef
 
-17 $fizzbuzz #[ prints 17 ]#
-15 $fizzbuzz #[ prints "fizzbuzz" ]#
- 9 $fizzbuzz #[ prints "fizz" ]#
-10 $fizzbuzz #[ prints "buzz" ]#
+define $main
+    17 $fizzbuzz #[ prints 17 ]#
+    15 $fizzbuzz #[ prints "fizzbuzz" ]#
+    9 $fizzbuzz #[ prints "fizz" ]#
+    10 $fizzbuzz #[ prints "buzz" ]#
 
-5 $count-down
-#[
-    prints 5 4 3 2 1 0
-]#
+    5 $count-down
+    #[
+        prints 5 4 3 2 1 0
+    ]#
+endef
 ```

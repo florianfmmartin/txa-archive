@@ -9,7 +9,9 @@ define $count-down #[ (n --) will print stuff ]#
 :end
 endef
 
-6 $count-down
+define $main
+    6 $count-down
+endef
 
 #[ recursive example 
 define $call-1

@@ -42,7 +42,7 @@ pub fn add(stack: &mut Stack) {
             s.push_str(&sb);
             stack.push(Element::Str(s));
         }
-        (ta, tb) => panic!("\n\nError:\nI could not add {:?} and {:?}\n\n", ta, tb),
+        (ta, tb) => panic!("Could not add {:?} and {:?}", ta, tb),
     }
 }
 
@@ -51,10 +51,7 @@ pub fn sub(stack: &mut Stack) {
     let a = stack.pop();
     match (a, b) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na - nb)),
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not subtract {:?} from {:?}\n\n",
-            tb, ta
-        ),
+        (ta, tb) => panic!("Could not subtract {:?} from {:?}", tb, ta),
     }
 }
 
@@ -66,7 +63,7 @@ pub fn mul(stack: &mut Stack) {
         (Some(Element::Str(sa)), Some(Element::Int(nb))) => {
             stack.push(Element::Str(sa.repeat(nb.try_into().unwrap())))
         }
-        (ta, tb) => panic!("\n\nError:\nI could not multiply {:?} by {:?}\n\n", ta, tb),
+        (ta, tb) => panic!("Could not multiply {:?} by {:?}", ta, tb),
     }
 }
 
@@ -75,10 +72,10 @@ pub fn div(stack: &mut Stack) {
     let a = stack.pop();
     match (a, b) {
         (Some(Element::Int(na)), Some(Element::Int(0))) => {
-            panic!("\n\nError:\nI could not divide {:?} by zero\n\n", na)
+            panic!("Could not divide {:?} by zero", na)
         }
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na / nb)),
-        (ta, tb) => panic!("\n\nError:\nI could not divide {:?} by {:?}\n\n", ta, tb),
+        (ta, tb) => panic!("Could not divide {:?} by {:?}", ta, tb),
     }
 }
 
@@ -87,10 +84,10 @@ pub fn modulo(stack: &mut Stack) {
     let a = stack.pop();
     match (a, b) {
         (Some(Element::Int(na)), Some(Element::Int(0))) => {
-            panic!("\n\nError:\nI could not divide {:?} by zero\n\n", na)
+            panic!("Could not divide {:?} by zero", na)
         }
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(na % nb)),
-        (ta, tb) => panic!("\n\nError:\nI could not modulo {:?} by {:?}\n\n", ta, tb),
+        (ta, tb) => panic!("Could not modulo {:?} by {:?}", ta, tb),
     }
 }
 
@@ -118,10 +115,7 @@ pub fn and(stack: &mut Stack) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(bool_to_int(
             int_to_bool(na) && int_to_bool(nb),
         ))),
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not do logic `and` of {:?} with {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not do logic `and` of {:?} with {:?}", ta, tb),
     }
 }
 
@@ -132,10 +126,7 @@ pub fn ior(stack: &mut Stack) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(bool_to_int(
             int_to_bool(na) || int_to_bool(nb),
         ))),
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not do logic `or` of {:?} with {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not do logic `or` of {:?} with {:?}", ta, tb),
     }
 }
 
@@ -146,10 +137,7 @@ pub fn xor(stack: &mut Stack) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => stack.push(Element::Int(bool_to_int(
             int_to_bool(na) != int_to_bool(nb),
         ))),
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not do logic `xor` of {:?} with {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not do logic `xor` of {:?} with {:?}", ta, tb),
     }
 }
 
@@ -157,7 +145,7 @@ pub fn not(stack: &mut Stack) {
     let a = stack.pop();
     match a {
         Some(Element::Int(na)) => stack.push(Element::Int(bool_to_int(!int_to_bool(na)))),
-        ta => panic!("\n\nError:\nI could not do logic `not` of {:?}\n\n", ta),
+        ta => panic!("Could not do logic `not` of {:?}", ta),
     }
 }
 
@@ -172,10 +160,7 @@ pub fn equ(stack: &mut Stack) {
         (Some(Element::Str(sa)), Some(Element::Str(sb))) => {
             stack.push(Element::Int(bool_to_int(sa == sb)))
         }
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not check equality of {:?} and {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not check equality of {:?} and {:?}", ta, tb),
     }
 }
 
@@ -189,10 +174,7 @@ pub fn neq(stack: &mut Stack) {
         (Some(Element::Str(sa)), Some(Element::Str(sb))) => {
             stack.push(Element::Int(bool_to_int(sa != sb)))
         }
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not check inequality of {:?} and {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not check inequality of {:?} and {:?}", ta, tb),
     }
 }
 
@@ -203,10 +185,7 @@ pub fn lst(stack: &mut Stack) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => {
             stack.push(Element::Int(bool_to_int(na < nb)))
         }
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not check if {:?} is lesser than {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not check if {:?} is lesser than {:?}", ta, tb),
     }
 }
 
@@ -217,10 +196,7 @@ pub fn grt(stack: &mut Stack) {
         (Some(Element::Int(na)), Some(Element::Int(nb))) => {
             stack.push(Element::Int(bool_to_int(na > nb)))
         }
-        (ta, tb) => panic!(
-            "\n\nError:\nI could not check if {:?} is lesser than {:?}\n\n",
-            ta, tb
-        ),
+        (ta, tb) => panic!("Could not check if {:?} is lesser than {:?}", ta, tb),
     }
 }
 
