@@ -26,8 +26,11 @@ pub fn pop(stack: &mut Stack) {
     stack.pop();
 }
 
-pub fn print(stack: &Stack) {
-    print!("{:?}\n", stack);
+pub fn print(stack: &mut Stack) {
+    match stack.pop() {
+        Some(e) => println!("{:#?}", e),
+        None => println!("Empty stack!"),
+    }
 }
 
 // Arithmetics
