@@ -26,9 +26,16 @@ pub fn pop(stack: &mut Stack) {
     stack.pop();
 }
 
+pub fn top(stack: &mut Stack) -> Option<Element> {
+    stack.pop()
+}
+
 pub fn print(stack: &mut Stack) {
     match stack.pop() {
-        Some(e) => println!("{:#?}", e),
+        Some(e) => match e {
+            Element::Int(i) => println!("{}", i),
+            Element::Str(s) => println!("{}", s),
+        },
         None => println!("Empty stack!"),
     }
 }
@@ -203,11 +210,33 @@ pub fn grt(stack: &mut Stack) {
     }
 }
 
-// To implement (maybe not here even)
-/*
- * cnd
- * whl
- * end
- * local
- * define
- */
+pub fn stack_operations() -> Vec<String> {
+    vec![
+        "pop", "print", "add", "sub", "mul", "div", "mod", "and", "ior", "xor", "not", "equ",
+        "neq", "lst", "grt",
+    ]
+    .iter()
+    .map(|s| String::from(s.to_string()))
+    .collect()
+}
+
+pub fn execute(stack: &mut Stack, token: &String) {
+    match token.as_str() {
+        "pop" => pop(stack),
+        "print" => print(stack),
+        "add" => add(stack),
+        "sub" => sub(stack),
+        "mul" => mul(stack),
+        "div" => div(stack),
+        "mod" => modulo(stack),
+        "and" => and(stack),
+        "ior" => ior(stack),
+        "xor" => xor(stack),
+        "not" => not(stack),
+        "equ" => equ(stack),
+        "neq" => neq(stack),
+        "lst" => lst(stack),
+        "grt" => grt(stack),
+        _ => panic!("Stack cannot execute this operation"),
+    }
+}

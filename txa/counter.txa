@@ -1,4 +1,6 @@
-define $count-down #[ (n --) will print stuff ]#
+#[
+
+define $count-down
     local @n
 :loop
     @n print
@@ -11,12 +13,14 @@ endef
 
 define $main
     6 $count-down
+    -3 $count-down
 endef
 
-#[ recursive example 
+]#
+
 define $call-1
+1 sub
     local @n
-    @n 1 sub
     @n 0 lst jump :end
     "call-1" print
     @n print
@@ -33,5 +37,6 @@ define $call-2
 :end
 endef
 
-6 $call-1
-]#
+define $main
+    6 $call-1
+endef
