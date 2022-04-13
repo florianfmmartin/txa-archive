@@ -26,11 +26,6 @@ fn leave_scope(scope: Scope) -> Scope {
 }
 
 pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
-    // TODO: delete me!
-    // for (k, v) in declarations {
-    //     println!("{:#?}: {:#?}", k, v);
-    // }
-
     let mut scope = Scope {
         name: String::from("$main"),
         index: 0,
@@ -59,12 +54,6 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
                 println!("{:?} -> {:?}", token, stack);
             }
             std::io::stdin().read_line(&mut String::new()).unwrap();
-        }
-
-        if stack::stack_operations().contains(token) {
-            stack::execute(&mut stack, token);
-            scope.index += 1;
-            continue;
         }
 
         if token.starts_with("$") {
@@ -154,6 +143,12 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
             }
             Err(_) => (),
         };
+
+        let try_stack = stack::execute(&mut stack, token);
+        if try_stack {
+            scope.index += 1;
+            continue;
+        }
 
         // Did not hit anything
         halt = true;

@@ -210,33 +210,68 @@ pub fn grt(stack: &mut Stack) {
     }
 }
 
-pub fn stack_operations() -> Vec<String> {
-    vec![
-        "pop", "print", "add", "sub", "mul", "div", "mod", "and", "ior", "xor", "not", "equ",
-        "neq", "lst", "grt",
-    ]
-    .iter()
-    .map(|s| String::from(s.to_string()))
-    .collect()
-}
-
-pub fn execute(stack: &mut Stack, token: &String) {
+pub fn execute(stack: &mut Stack, token: &String) -> bool {
     match token.as_str() {
-        "pop" => pop(stack),
-        "print" => print(stack),
-        "add" => add(stack),
-        "sub" => sub(stack),
-        "mul" => mul(stack),
-        "div" => div(stack),
-        "mod" => modulo(stack),
-        "and" => and(stack),
-        "ior" => ior(stack),
-        "xor" => xor(stack),
-        "not" => not(stack),
-        "equ" => equ(stack),
-        "neq" => neq(stack),
-        "lst" => lst(stack),
-        "grt" => grt(stack),
-        _ => panic!("Stack cannot execute this operation"),
+        "pop" => {
+            pop(stack);
+            true
+        }
+        "print" => {
+            print(stack);
+            true
+        }
+        "add" => {
+            add(stack);
+            true
+        }
+        "sub" => {
+            sub(stack);
+            true
+        }
+        "mul" => {
+            mul(stack);
+            true
+        }
+        "div" => {
+            div(stack);
+            true
+        }
+        "mod" => {
+            modulo(stack);
+            true
+        }
+        "and" => {
+            and(stack);
+            true
+        }
+        "ior" => {
+            ior(stack);
+            true
+        }
+        "xor" => {
+            xor(stack);
+            true
+        }
+        "not" => {
+            not(stack);
+            true
+        }
+        "equ" => {
+            equ(stack);
+            true
+        }
+        "neq" => {
+            neq(stack);
+            true
+        }
+        "lst" => {
+            lst(stack);
+            true
+        }
+        "grt" => {
+            grt(stack);
+            true
+        }
+        _ => false,
     }
 }
