@@ -1,0 +1,86 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Texo assembly",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#ints"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#labels"
+    },
+    {
+      "include": "#vars"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.block",
+      "begin": "#\\[",
+      "end": "\\]#"
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.txa",
+          "match": "\\b(define|endef)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.txa",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.txa",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "ints": {
+      "patterns": [
+        {
+          "name": "constant.numeric",
+          "match": "(\\s|^)-?\\d+"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function",
+          "match": "(\\s|^)\\$(\\w|-)+"
+        }
+      ]
+    },
+    "labels": {
+      "patterns": [
+        {
+          "name": "storage",
+          "match": "(\\s|^):(\\w|-)+"
+        }
+      ]
+    },
+    "vars": {
+      "patterns": [
+        {
+          "name": "entity.name.type",
+          "match": "(\\s|^)\\@(\\w|-)+"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.txa"
+}

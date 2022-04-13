@@ -1,0 +1,25 @@
+{
+    "name": "txa-lang",
+    "displayName": "txa-lang",
+    "description": "Syntax support for Texo Assembly `.txa`",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.66.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "txa",
+            "aliases": ["Texo assembly", "txa"],
+            "extensions": [".txa"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "txa",
+            "scopeName": "source.txa",
+            "path": "./syntaxes/txa.tmLanguage.json"
+        }]
+    }
+}
