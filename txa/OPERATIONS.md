@@ -16,7 +16,7 @@
 
 `rot` makes `a b c -- b c a`
 
-`print` makes `a -- ` with printing `a`
+`print` makes `a -- `   with printing `a`
 
 ## Arithmetics
 `add` makes `3 4 -- 7`; makes `"hello, " "world!" -- "hello, world!"`

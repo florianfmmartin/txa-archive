@@ -12,9 +12,9 @@ Procedures have their own scope to reuse values seen on the stack via named vari
 
 ## Texo assembly `.txa`
 
-[More details here](./txa/README.md)
+[More details here](./txa/)
 
-[Vscode syntax extension here](./vscode-txa/txa-lang/README.md)
+[Vscode syntax extension here](./vscode-txa/txa-lang/)
 
 Quick example
 
