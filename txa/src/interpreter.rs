@@ -41,12 +41,11 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
         let declaration = declarations
             .get(&scope.name)
             .expect("Could not find declartion with given name");
-        let token = declaration.code.get(scope.index).expect("Cannot get token");
+        let token = declaration.get(scope.index).expect("Cannot get token");
 
         if debug {
             if token.as_str() == "local" || token.as_str() == "jump" {
                 let next = declaration
-                    .code
                     .get(scope.index + 1)
                     .expect("Cannot get token");
                 println!("{:?} : {:?} -> {:?}", token, next, stack);
@@ -73,14 +72,10 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
 
         if token.as_str() == "jump" {
             scope.index += 1;
-            let label = declaration
-                .code
+            let delta_str = declaration
                 .get(scope.index)
-                .expect("Cannot get label for jump");
-            let jump_index = declaration
-                .labels
-                .get(label)
-                .expect("Do not know this label");
+                .expect("Cannot get delte for jump");
+            let delta: i64 = delta_str.parse::<i64>().unwrap();
             let should_jump = match stack::top(&mut stack) {
                 Some(stack::Element::Int(i)) => {
                     if i != 0 {
@@ -92,7 +87,12 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
                 _ => false,
             };
             if should_jump {
-                scope.index = *jump_index;
+                let next_index: i64 = (scope.index as i64) + delta - 1;
+                if next_index >= 0 {
+                    scope.index = next_index as usize;
+                } else {
+                    panic!("Can't jump to negative index!");
+                }
             } else {
                 scope.index += 1;
             }
@@ -107,7 +107,6 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
         if token.as_str() == "local" {
             scope.index += 1;
             let varname = declaration
-                .code
                 .get(scope.index)
                 .expect("Cannot get var name");
             let value = stack::top(&mut stack).expect("No value to put into var");
