@@ -1,11 +1,11 @@
 use super::compiler::Definition;
 use super::stack;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 struct Scope {
     name: String,
     index: usize,
-    vars: HashMap<String, stack::Element>,
+    vars: BTreeMap<String, stack::Element>,
     parent: Option<Box<Scope>>,
 }
 
@@ -13,7 +13,7 @@ fn enter_scope(scope: Scope, scope_name: String) -> Scope {
     Scope {
         name: scope_name,
         index: 0,
-        vars: HashMap::new(),
+        vars: BTreeMap::new(),
         parent: Some(Box::new(scope)),
     }
 }
@@ -25,11 +25,11 @@ fn leave_scope(scope: Scope) -> Scope {
     }
 }
 
-pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
+pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
     let mut scope = Scope {
         name: String::from("$main"),
         index: 0,
-        vars: HashMap::new(),
+        vars: BTreeMap::new(),
         parent: None,
     };
 
@@ -56,7 +56,7 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
             std::io::stdin().read_line(&mut String::new()).unwrap();
         }
 
-        if token.starts_with("$") {
+        if token.chars().nth(0) == Some('$') {
             scope = enter_scope(scope, token.to_string());
             continue;
         }
@@ -99,7 +99,7 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
             continue;
         }
 
-        if token.starts_with(":") {
+        if token.chars().nth(0) == Some(':') {
             scope.index += 1;
             continue;
         }
@@ -116,7 +116,7 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
             continue;
         }
 
-        if token.starts_with("@") {
+        if token.chars().nth(0) == Some('@') {
             match scope.vars.get(token) {
                 Some(t) => match t {
                     stack::Element::Int(i) => stack::push(&mut stack, stack::m_int(*i)),
@@ -128,7 +128,7 @@ pub fn run(declarations: HashMap<String, Definition>, debug: bool) {
             continue;
         }
 
-        if token.starts_with("\"") && token.ends_with("\"") {
+        if token.chars().nth(0) == Some('"') && token.chars().nth_back(0) == Some('"') {
             stack::push(&mut stack, stack::m_str(token));
             scope.index += 1;
             continue;

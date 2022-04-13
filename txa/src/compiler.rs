@@ -1,9 +1,9 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Definition {
     pub code: Vec<String>,
-    pub labels: HashMap<String, usize>,
+    pub labels: BTreeMap<String, usize>,
 }
 
 fn remove_comments(tokens: Vec<String>) -> Vec<String> {
@@ -47,7 +47,7 @@ fn make_definition(definition: Vec<String>) -> Definition {
     let mut code = definition.clone();
     code.remove(0);
 
-    let mut labels = HashMap::new();
+    let mut labels = BTreeMap::new();
 
     let mut index = 0;
     while index < code.len() {
@@ -56,7 +56,7 @@ fn make_definition(definition: Vec<String>) -> Definition {
             index += 2;
             continue;
         }
-        if token.starts_with(":") {
+        if token.chars().nth(0) == Some(':') {
             labels.insert(token.to_string(), index);
         }
 
@@ -69,12 +69,12 @@ fn make_definition(definition: Vec<String>) -> Definition {
     }
 }
 
-pub fn run(init_tokens: Vec<String>) -> HashMap<String, Definition> {
+pub fn run(init_tokens: Vec<String>) -> BTreeMap<String, Definition> {
     let mut tokens = init_tokens;
     tokens = remove_comments(tokens);
 
     let definitions = group_definitions(tokens);
-    let mut declarations_map: HashMap<String, Definition> = HashMap::new();
+    let mut declarations_map: BTreeMap<String, Definition> = BTreeMap::new();
     for definition in definitions.clone().into_iter() {
         let varname = definition.get(0).unwrap().to_string();
         declarations_map.insert(varname, make_definition(definition));
