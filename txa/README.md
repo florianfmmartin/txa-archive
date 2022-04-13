@@ -83,3 +83,9 @@ define $main
     ]#
 endef
 ```
+
+## Todo
+
+- [ ] Optimize labels with `jump index_modifier` for less hashmap.get
+- [ ] check for loops
+
