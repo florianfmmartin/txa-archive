@@ -19,7 +19,7 @@ endef
 ]#
 
 define $call-1
-1 sub
+    1 sub
     local @n
     @n 0 lst jump :end
     "call-1" print
