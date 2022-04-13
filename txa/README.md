@@ -86,6 +86,9 @@ endef
 
 ## Todo
 
-- [ ] Optimize labels with `jump index_modifier` for less hashmap.get
 - [ ] check for loops
+- [ ] debug flag
+- [ ] Optimize labels with `jump index_modifier` for less hashmap.get
+- [ ] stack manipulation operations (dup swp ovr nip rot)
+- [ ] return stack (trs tsr rop)
 
