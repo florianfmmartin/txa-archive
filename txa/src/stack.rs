@@ -30,6 +30,41 @@ pub fn top(stack: &mut Stack) -> Option<Element> {
     stack.pop()
 }
 
+pub fn dup(stack: &mut Stack) {
+    let element = match stack.last().expect("No element to dupplicate") {
+        Element::Int(i) => m_int(i.clone()),
+        Element::Str(s) => m_str(&s.clone()),
+    };
+    stack.push(element);
+}
+
+pub fn swp(stack: &mut Stack) {
+    let b = stack.pop().expect("Empty stack while swapping!");
+    let a = stack.pop().expect("Empty stack while swapping!");
+    stack.push(b);
+    stack.push(a);
+}
+
+pub fn ovr(stack: &mut Stack) {
+    let b = match stack
+        .get(stack.len() - 2)
+        .expect("Empty stack while doing ovr")
+    {
+        Element::Int(i) => m_int(i.clone()),
+        Element::Str(s) => m_str(&s.clone()),
+    };
+    stack.push(b);
+}
+
+pub fn rot(stack: &mut Stack) {
+    let c = stack.pop().expect("Empty stack while swapping!");
+    let b = stack.pop().expect("Empty stack while swapping!");
+    let a = stack.pop().expect("Empty stack while swapping!");
+    stack.push(b);
+    stack.push(c);
+    stack.push(a);
+}
+
 pub fn print(stack: &mut Stack) {
     match stack.pop() {
         Some(e) => match e {
@@ -214,6 +249,22 @@ pub fn execute(stack: &mut Stack, token: &String) -> bool {
     match token.as_str() {
         "pop" => {
             pop(stack);
+            true
+        }
+        "dup" => {
+            dup(stack);
+            true
+        }
+        "swp" => {
+            swp(stack);
+            true
+        }
+        "ovr" => {
+            ovr(stack);
+            true
+        }
+        "rot" => {
+            rot(stack);
             true
         }
         "print" => {

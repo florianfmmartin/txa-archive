@@ -1,0 +1,15 @@
+define $main
+    3 dup #[ 3 3   ]#
+    pop 4 #[ 3 4   ]#
+    ovr   #[ 3 4 3 ]#
+    swp   #[ 3 3 4 ]#
+    rot   #[ 3 4 3 ]#
+    pop   #[ 3 4   ]#
+    5     #[ 3 4 5 ]#
+    rot   #[ 4 5 3 ]#
+    pop   #[ 4 5   ]#
+    add   #[ 9     ]#
+    9 equ #[ 1     ]#
+    print #[  ]#
+    pop   #[ panic! ]#
+endef
