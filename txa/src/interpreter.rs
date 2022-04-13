@@ -6,6 +6,7 @@ struct Scope {
     name: String,
     index: usize,
     vars: BTreeMap<String, stack::Element>,
+    return_stack: stack::Stack,
     parent: Option<Box<Scope>>,
 }
 
@@ -14,6 +15,7 @@ fn enter_scope(scope: Scope, scope_name: String) -> Scope {
         name: scope_name,
         index: 0,
         vars: BTreeMap::new(),
+        return_stack: Vec::new(),
         parent: Some(Box::new(scope)),
     }
 }
@@ -30,6 +32,7 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
         name: String::from("$main"),
         index: 0,
         vars: BTreeMap::new(),
+        return_stack: Vec::new(),
         parent: None,
     };
 
@@ -37,25 +40,34 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
 
     let mut halt = false;
 
+    let mut declaration = declarations
+        .get(&scope.name)
+        .expect("Could not find declartion with given name");
+    let mut last_scope_name = scope.name.clone();
     while !halt {
-        let declaration = declarations
-            .get(&scope.name)
-            .expect("Could not find declartion with given name");
+        if scope.name != last_scope_name {
+            last_scope_name = scope.name.clone();
+            declaration = declarations
+                .get(&scope.name)
+                .expect("Could not find declartion with given name");
+        }
+
         let token = declaration.get(scope.index).expect("Cannot get token");
 
         if debug {
             if token.as_str() == "local" || token.as_str() == "jump" {
-                let next = declaration
-                    .get(scope.index + 1)
-                    .expect("Cannot get token");
-                println!("{:?} : {:?} -> {:?}", token, next, stack);
+                let next = declaration.get(scope.index + 1).expect("Cannot get token");
+                println!(
+                    "{:?} : {:?} -> {:?} & {:?}",
+                    token, next, stack, scope.return_stack
+                );
             } else {
-                println!("{:?} -> {:?}", token, stack);
+                println!("{:?} -> {:?} & {:?}", token, stack, scope.return_stack);
             }
             std::io::stdin().read_line(&mut String::new()).unwrap();
         }
 
-        if token.chars().nth(0) == Some('$') {
+        if token.chars().next() == Some('$') {
             scope = enter_scope(scope, token.to_string());
             continue;
         }
@@ -99,23 +111,16 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
             continue;
         }
 
-        if token.chars().nth(0) == Some(':') {
-            scope.index += 1;
-            continue;
-        }
-
         if token.as_str() == "local" {
             scope.index += 1;
-            let varname = declaration
-                .get(scope.index)
-                .expect("Cannot get var name");
+            let varname = declaration.get(scope.index).expect("Cannot get var name");
             let value = stack::top(&mut stack).expect("No value to put into var");
             scope.vars.insert(varname.to_string(), value);
             scope.index += 1;
             continue;
         }
 
-        if token.chars().nth(0) == Some('@') {
+        if token.chars().next() == Some('@') {
             match scope.vars.get(token) {
                 Some(t) => match t {
                     stack::Element::Int(i) => stack::push(&mut stack, stack::m_int(*i)),
@@ -127,7 +132,8 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
             continue;
         }
 
-        if token.chars().nth(0) == Some('"') && token.chars().nth_back(0) == Some('"') {
+        let chars = &mut token.chars();
+        if chars.next() == Some('"') && chars.nth_back(0) == Some('"') {
             stack::push(&mut stack, stack::m_str(token));
             scope.index += 1;
             continue;
@@ -142,6 +148,12 @@ pub fn run(declarations: BTreeMap<String, Definition>, debug: bool) {
             }
             Err(_) => (),
         };
+
+        let try_ret_stack = stack::execute_ret(&mut scope.return_stack, &mut stack, token);
+        if try_ret_stack {
+            scope.index += 1;
+            continue;
+        }
 
         let try_stack = stack::execute(&mut stack, token);
         if try_stack {

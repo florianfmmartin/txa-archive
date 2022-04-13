@@ -1,0 +1,67 @@
+define $main
+    10000 0 $fizzbuzz
+endef
+
+define $gen-range
+    tsr
+:loop
+    dup
+    1 sub
+    dup
+    crs
+    equ jump :end
+    1 jump :loop
+:end
+endef
+
+define $fizzbuzz
+    ovr tsr
+    $gen-range
+:loop
+    $fizzbuzz-once
+    dup
+    crs equ jump :last
+    1 jump :loop
+:last
+    $fizzbuzz-once
+endef
+
+define $fizzbuzz-once
+    dup
+    dup
+    5 mod
+    0 equ tsr
+
+    3 mod
+    0 equ
+
+    trs
+    csr
+    swp
+    csr
+
+    and jump :fb
+
+    trs jump :f
+    trs jump :b
+    1 jump :n
+
+:fb
+    "fizzbuzz" print
+    pop
+    1 jump :end
+
+:f
+    "fizz" print
+    pop
+    1 jump :end
+
+:b 
+    "buzz" print
+    pop
+    1 jump :end
+
+:n
+    print
+:end
+endef

@@ -30,7 +30,7 @@ pub fn top(stack: &mut Stack) -> Option<Element> {
     stack.pop()
 }
 
-pub fn dup(stack: &mut Stack) {
+fn dup(stack: &mut Stack) {
     let element = match stack.last().expect("No element to dupplicate") {
         Element::Int(i) => m_int(i.clone()),
         Element::Str(s) => m_str(&s.clone()),
@@ -38,14 +38,14 @@ pub fn dup(stack: &mut Stack) {
     stack.push(element);
 }
 
-pub fn swp(stack: &mut Stack) {
+fn swp(stack: &mut Stack) {
     let b = stack.pop().expect("Empty stack while swapping!");
     let a = stack.pop().expect("Empty stack while swapping!");
     stack.push(b);
     stack.push(a);
 }
 
-pub fn ovr(stack: &mut Stack) {
+fn ovr(stack: &mut Stack) {
     let b = match stack
         .get(stack.len() - 2)
         .expect("Empty stack while doing ovr")
@@ -56,7 +56,7 @@ pub fn ovr(stack: &mut Stack) {
     stack.push(b);
 }
 
-pub fn rot(stack: &mut Stack) {
+fn rot(stack: &mut Stack) {
     let c = stack.pop().expect("Empty stack while swapping!");
     let b = stack.pop().expect("Empty stack while swapping!");
     let a = stack.pop().expect("Empty stack while swapping!");
@@ -76,7 +76,7 @@ pub fn print(stack: &mut Stack) {
 }
 
 // Arithmetics
-pub fn add(stack: &mut Stack) {
+fn add(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -91,7 +91,7 @@ pub fn add(stack: &mut Stack) {
     }
 }
 
-pub fn sub(stack: &mut Stack) {
+fn sub(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -100,7 +100,7 @@ pub fn sub(stack: &mut Stack) {
     }
 }
 
-pub fn mul(stack: &mut Stack) {
+fn mul(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -112,7 +112,7 @@ pub fn mul(stack: &mut Stack) {
     }
 }
 
-pub fn div(stack: &mut Stack) {
+fn div(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -124,7 +124,7 @@ pub fn div(stack: &mut Stack) {
     }
 }
 
-pub fn modulo(stack: &mut Stack) {
+fn modulo(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -153,7 +153,7 @@ fn bool_to_int(b: bool) -> i64 {
     }
 }
 
-pub fn and(stack: &mut Stack) {
+fn and(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -164,7 +164,7 @@ pub fn and(stack: &mut Stack) {
     }
 }
 
-pub fn ior(stack: &mut Stack) {
+fn ior(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -175,7 +175,7 @@ pub fn ior(stack: &mut Stack) {
     }
 }
 
-pub fn xor(stack: &mut Stack) {
+fn xor(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -186,7 +186,7 @@ pub fn xor(stack: &mut Stack) {
     }
 }
 
-pub fn not(stack: &mut Stack) {
+fn not(stack: &mut Stack) {
     let a = stack.pop();
     match a {
         Some(Element::Int(na)) => stack.push(Element::Int(bool_to_int(!int_to_bool(na)))),
@@ -195,7 +195,7 @@ pub fn not(stack: &mut Stack) {
 }
 
 // Comparison
-pub fn equ(stack: &mut Stack) {
+fn equ(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -209,7 +209,7 @@ pub fn equ(stack: &mut Stack) {
     }
 }
 
-pub fn neq(stack: &mut Stack) {
+fn neq(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -223,7 +223,7 @@ pub fn neq(stack: &mut Stack) {
     }
 }
 
-pub fn lst(stack: &mut Stack) {
+fn lst(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -234,7 +234,7 @@ pub fn lst(stack: &mut Stack) {
     }
 }
 
-pub fn grt(stack: &mut Stack) {
+fn grt(stack: &mut Stack) {
     let b = stack.pop();
     let a = stack.pop();
     match (a, b) {
@@ -324,5 +324,52 @@ pub fn execute(stack: &mut Stack, token: &String) -> bool {
             true
         }
         _ => false,
+    }
+}
+
+// Return stack
+fn transfer(stack_a: &mut Stack, stack_b: &mut Stack) {
+    let element = stack_a.pop().expect("Can't pop from empty stack");
+    stack_b.push(match element {
+        Element::Int(i) => m_int(i.clone()),
+        Element::Str(s) => m_str(&s.clone()),
+    });
+}
+
+fn copy_onto(stack_a: &mut Stack, stack_b: &mut Stack) {
+    let element = stack_a.last().expect("Can't pop from empty stack");
+    stack_b.push(match element {
+        Element::Int(i) => m_int(i.clone()),
+        Element::Str(s) => m_str(&s.clone()),
+    });
+}
+
+fn rpop(ret: &mut Stack) {
+    ret.pop();
+}
+
+pub fn execute_ret(ret: &mut Stack, stack: &mut Stack, token: &String) -> bool {
+    match token.as_str() {
+        "trs" => {
+            transfer(ret, stack);
+            true
+        }
+        "tsr" => {
+            transfer(stack, ret);
+            true
+        }
+        "crs" => {
+            copy_onto(ret, stack);
+            true
+        }
+        "csr" => {
+            copy_onto(stack, ret);
+            true
+        }
+        "rpop" => {
+            rpop(ret);
+            true
+        }
+        _ => false
     }
 }

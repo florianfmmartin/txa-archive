@@ -1,5 +1,5 @@
 define $main
-    0 100 $fizzbuzz
+    0 10000 $fizzbuzz
 endef
 
 define $fizzbuzz

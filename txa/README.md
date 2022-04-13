@@ -90,5 +90,5 @@ endef
 - [x] debug flag
 - [x] Optimize labels with `jump index_modifier` for less hashmap.get
 - [x] stack manipulation operations (dup swp ovr nip rot)
-- [ ] return stack (trs tsr rop)
+- [x] return stack (trs tsr rpop)
 

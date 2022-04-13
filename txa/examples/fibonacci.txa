@@ -1,5 +1,5 @@
 define $main
-    25 $fibonacci
+    26 $fibonacci
     print
 endef
 
