@@ -1,0 +1,58 @@
+define $main
+    0 100 $fizzbuzz
+endef
+
+define $fizzbuzz
+    local @end
+    local @start
+
+    @start
+    local @n
+
+:loop
+    @n $fizzbuzz-once
+
+    @n @end equ jump :end
+
+    @n 1 add
+    local @n
+
+    1 jump :loop
+:end
+endef
+
+define $fizzbuzz-once
+    local @n
+
+    @n 5 mod
+    0 equ
+    local @five
+
+    @n 3 mod
+    0 equ
+    local @three
+
+    @five @three and jump :fizz-buzz
+    @three jump :fizz
+    @five jump :buzz
+    1 jump :number
+
+:fizz-buzz
+    "fizzbuzz"
+    1 jump :end
+
+:fizz
+    "fizz"
+    1 jump :end
+
+:buzz
+    "buzz"
+    1 jump :end
+
+:number
+    @n
+    1 jump :end
+
+:end
+    print
+endef
