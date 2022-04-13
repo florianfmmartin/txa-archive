@@ -8,11 +8,12 @@ It is a stack based machine
 
 It reads tokens that can define procedures acting on the stack
 
-Procedures have their own scope to reuse values seen on the stack
+Procedures have their own scope to reuse values seen on the stack via named variables or a scoped stack
 
-## Assembly language `.txa`
+## Texo assembly `.txa`
 
 [More details here](./txa/README.md)
+[Vscode syntax extension here](./vscode-txa/txa-lang/README.md)
 
 Quick example
 

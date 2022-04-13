@@ -84,11 +84,5 @@ define $main
 endef
 ```
 
-## Todo
-
-- [x] check for loops
-- [x] debug flag
-- [x] Optimize labels with `jump index_modifier` for less hashmap.get
-- [x] stack manipulation operations (dup swp ovr nip rot)
-- [x] return stack (trs tsr rpop)
-
+## Available operations
+[See here](./OPERATIONS.md)
