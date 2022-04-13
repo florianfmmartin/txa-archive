@@ -89,6 +89,6 @@ endef
 - [x] check for loops
 - [x] debug flag
 - [x] Optimize labels with `jump index_modifier` for less hashmap.get
-- [ ] stack manipulation operations (dup swp ovr nip rot)
+- [x] stack manipulation operations (dup swp ovr nip rot)
 - [ ] return stack (trs tsr rop)
 
